@@ -11,6 +11,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Sem FOSSA_API_KEY nao ha como escanear: o segredo nao existe neste
+      # fork, e a action falhava o push inteiro por isso. Quando a chave for
+      # configurada, o passo volta a rodar sozinho.
+      - name: Checar se a chave da FOSSA existe
+        id: key
+        shell: bash
+        env:
+          FOSSA_API_KEY: ${{ secrets.fossaApiKey }}
+        run: |
+          if [ -n "${FOSSA_API_KEY}" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::fossaApiKey ausente - scan da FOSSA ignorado"
+          fi
       - uses: fossas/fossa-action@main
+        if: steps.key.outputs.present == 'true'
         with:
           api-key: ${{ secrets.fossaApiKey }}

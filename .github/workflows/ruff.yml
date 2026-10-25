@@ -5,4 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Versao fixada de proposito: o ruff mudou o conjunto de regras padrao na
+      # 0.17 (UP/BLE/SIM/PLW passaram a disparar), o que reprovou ~925 pontos
+      # de estilo de uma vez num codigo que estava verde. Atualize a versao
+      # junto com as correcoes, nunca por acidente via "latest".
       - uses: astral-sh/ruff-action@v3
+        with:
+          version: "0.15.12"
