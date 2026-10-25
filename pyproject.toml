@@ -71,3 +71,9 @@ per-file-ignores = { "scripts/run_bilibili_live.py" = ["E402"] }
 # O gate roda `uv run pytest`; sem o grupo dev o binario nao existe e o
 # validate-pr saia com "Failed to spawn: pytest".
 dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+# O projeto nao tem build-system, entao `uv run pytest` nao instala
+# open_llm_vtuber no venv: sem pythonpath o import falha na coleta.
+pythonpath = ["src"]
+testpaths = ["tests"]
